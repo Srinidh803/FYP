@@ -26,6 +26,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-for-dev')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+
 
 
 
