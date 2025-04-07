@@ -25,6 +25,7 @@ def home(request):
 
 
 # Search View
+@login_required
 def search(request):
     players = PlayerProfile.objects.exclude(user=request.user)
     
