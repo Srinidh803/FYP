@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Create Your Player Profile</h2>
+  <form method="POST" enctype="multipart/form-data">  <!-- 👈 This is important -->
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Profile</button>
+  </form>
+{% endblock %}

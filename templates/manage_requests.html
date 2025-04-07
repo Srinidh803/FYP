@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h4>Incoming Player Requests</h4>
+  {% for req in incoming %}
+    <div class="card mb-2 p-3">
+      <p><strong>{{ req.from_user.username }}</strong> wants to connect.</p>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="request_id" value="{{ req.id }}">
+        <button name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+        <button name="action" value="decline" class="btn btn-danger btn-sm">Decline</button>
+      </form>
+    </div>
+  {% empty %}
+    <p>No requests at the moment.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search Players - GameConnect{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-5 fw-bold text-primary">🎮 Find Players</h2>
+
+  <!-- 🔍 Filter Form -->
+  <form method="GET" class="row g-3 mb-5 p-4 rounded shadow-sm bg-light">
+    <div class="col-md-3">
+      <input type="text" name="game" class="form-control" placeholder="🎮 Game">
+    </div>
+    <div class="col-md-3">
+      <input type="text" name="state" class="form-control" placeholder="📍 State">
+    </div>
+    <div class="col-md-3">
+      <select name="experience" class="form-select">
+        <option value="">💼 Experience</option>
+        <option value="1">1+ years</option>
+        <option value="3">3+ years</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Available From ⏰</label>
+      <input type="time" name="available_from" class="form-control">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Available To ⏰</label>
+      <input type="time" name="available_to" class="form-control">
+    </div>
+    <div class="col-md-3 align-self-end">
+      <button type="submit" class="btn btn-primary w-100 fw-semibold">🔍 Search</button>
+    </div>
+  </form>
+
+  <!-- 🎮 Player Cards -->
+  <div class="row">
+    {% for player in search_results %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-lg h-100 border-0" style="transition: 0.3s;">
+        <div class="card-body text-center">
+          <img 
+            src="{% if player.profile_pic %}{{ player.profile_pic.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" 
+            alt="Profile Image" 
+            class="rounded-circle border border-3 border-primary mb-3" 
+            width="100" height="100"
+            style="object-fit: cover;"
+          >            
+          <h5 class="card-title fw-bold text-dark">{{ player.user.username }}</h5>
+          <p class="mb-1 text-muted"><strong>Game:</strong> {{ player.game }}</p>
+          <p class="mb-1 text-muted"><strong>Rating:</strong> ⭐ {{ player.self_rating }}/5</p>
+          <a href="{% url 'player_profile' player.user.username %}" class="btn btn-outline-primary mt-3">View Profile</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No players found. Try different filters!</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Optional Hover Effect Script (if you'd like animation) -->
+<style>
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  }
+</style>
+{% endblock %}

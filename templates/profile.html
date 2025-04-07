@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}{{ player.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <div class="text-center">
+      {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" class="rounded-circle mb-3" width="120" height="120" alt="Profile Picture">
+      {% else %}
+        <img src="{% static 'images/default.jpg' %}" class="rounded-circle mb-3" width="120" height="120" alt="Default Picture">
+      {% endif %}
+      <h2>{{ player.get_full_name|default:player.username }}</h2>
+      <p class="text-muted">{{ profile.bio }}</p>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>College:</strong> {{ profile.college }}</p>
+        <p><strong>District:</strong> {{ profile.district }}</p>
+        <p><strong>State:</strong> {{ profile.state }}</p>
+        <p><strong>Country:</strong> {{ profile.country }}</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Game:</strong> {{ profile.game }}</p>
+        <p><strong>Experience:</strong> {{ profile.experience }} years</p>
+        <p><strong>Availability:</strong> {{ profile.available_from|time:"g:i A" }} - {{ profile.available_to|time:"g:i A" }}</p>
+
+        <p><strong>Rating:</strong> ⭐ {{ profile.self_rating }}/5</p>
+      </div>
+    </div>
+
+    {% if profile.skills %}
+      <hr>
+      <div>
+        <p><strong>Skills:</strong></p>
+        {% for skill in profile.skills|split_by_comma %}
+          <span class="badge bg-primary me-1">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        {% if request.user != profile.user %}
+          {% if already_friends %}
+            <button class="btn btn-success" disabled>✓ Friends</button>
+          {% elif already_requested %}
+            <button class="btn btn-warning" disabled>⏳ Request Sent</button>
+          {% else %}
+            <form method="post" action="{% url 'add_player' user.username %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Add Player</button>
+            </form>
+          {% endif %}
+        {% endif %}      
+      <a href="{% url 'chat' %}" class="btn btn-primary">Chat Now</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

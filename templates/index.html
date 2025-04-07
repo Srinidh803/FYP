@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - FYP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    .hero-section {
+      background: url("{% static 'images/bg.jpg' %}") no-repeat center center/cover;
+      height: 100vh;
+      color: white;
+      text-shadow: 2px 2px 4px #000;
+    }
+  
+    .card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+  
+    #about {
+      background: linear-gradient(135deg, #a3d5ff, #e5f4ff);
+      padding: 60px 0;
+      border-radius: 12px;
+      color: #003e6b;
+    }
+  
+    #contact {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      padding: 60px 0;
+      border-radius: 12px;
+      color: white;
+    }
+  
+    #contact a {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+  
+    #contact a:hover {
+      color: #fff;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">FYP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'player_profile' user.username %}">Profile</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'manage_requests' %}">Pending Requests</a>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero-section d-flex flex-column justify-content-center align-items-center text-center">
+    <h1 class="display-4">Welcome to Find Your Player</h1>
+    <p class="lead">Find your perfect gaming partner today.</p>
+    <a href="{% url 'search' %}" class="btn btn-primary btn-lg mt-3">Find Player</a>
+  </div>
+
+  <!-- Top Players -->
+  <section class="container mt-5">
+    <h3 class="text-center">Top Players</h3>
+    <div class="row justify-content-center">
+      {% for player in top_players %}
+        <div class="col-md-4 mb-4">
+          <div class="card shadow text-center p-3">
+            {% if player.profile_picture %}
+              <img src="{{ player.profile_picture.url }}" alt="{{ player.user.username }} Profile">
+            {% else %}
+              <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar">
+            {% endif %}
+            <h5>{{ player.user.username }}</h5>
+            <p>Game: {{ player.game }}</p>
+            <p>Rating: ⭐ {{ player.self_rating }}/5</p>
+            <a href="{% url 'player_profile' player.user.username %}" class="btn btn-sm btn-outline-primary">View Profile</a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center">No top players found.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Trending Players -->
+  <section class="container mt-5">
+    <h3 class="text-center">Trending Players</h3>
+    <div class="row justify-content-center">
+      {% for player in trending_players %}
+        <div class="col-md-4 mb-4">
+          <div class="card shadow text-center p-3">
+            {% if player.profile_picture %}
+              <img src="{{ player.profile_picture.url }}" alt="{{ player.user.username }} Profile">
+            {% else %}
+              <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar">
+            {% endif %}
+            <h5>{{ player.user.username }}</h5>
+            <p>Game: {{ player.game }}</p>
+            <p>Rating: ⭐ {{ player.self_rating }}/5</p>
+            <a href="{% url 'player_profile' player.user.username %}" class="btn btn-sm btn-outline-success">View Profile</a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center">No trending players found.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="container mt-5" id="about">
+    <h2 class="text-center mb-3">About Us</h2>
+    <div class="text-center mx-auto" style="max-width: 700px;">
+      <p>GameConnect is a community of passionate gamers. Whether you're into FPS, RPG, or casual games, our platform helps you connect with like-minded players, build teams, and level up your gaming experience. Join the movement and never game alone again!</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="container mt-5 mb-5" id="contact">
+    <h2 class="text-center mb-3">Contact Us</h2>
+    <div class="text-center">
+      <p>If you have any questions, feel free to reach out to us.</p>
+      <p><strong>Email:</strong> support@gameconnect.com</p>
+      <p><strong>Follow us:</strong> 
+        <a href="#" class="text-primary">Twitter</a> | 
+        <a href="#" class="text-danger">Instagram</a> | 
+        <a href="#" class="text-dark">GitHub</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Bootstrap Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>
