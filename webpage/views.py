@@ -65,23 +65,26 @@ def player_profile(request, username):
 
 @login_required
 def add_player(request, username):
-    to_user = get_object_or_404(User, username=username)
+    print(f"🛎️ Received request to add {username}")
 
-    # Prevent adding yourself
-    if request.user == to_user:
-        return redirect('player_profile', username=username)
+    if request.method == 'POST':
+        try:
+            to_user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            print("❌ User not found.")
+            return redirect('home')  # or show some error
 
-    # Prevent duplicates
-    request_exists = PlayerRequest.objects.filter(
-        from_user=request.user,
-        to_user=to_user
-    ).exists()
+        # Prevent duplicate requests
+        if PlayerRequest.objects.filter(from_user=request.user, to_user=to_user, status='pending').exists():
+            print("⚠️ Duplicate request detected.")
+            return redirect('profile', username=username)
 
-    if not request_exists:
-        PlayerRequest.objects.create(from_user=request.user, to_user=to_user)
-        print(f"Request created: {request.user.username} ➡ {to_user.username}")
+        pr = PlayerRequest(from_user=request.user, to_user=to_user)
+        pr.save()
+        print(f"✅ PlayerRequest created: {pr.from_user.username} ➡ {pr.to_user.username}")
 
-    return redirect('player_profile', username=username)
+    return redirect('profile', username=username)
+
 
 @login_required
 def manage_requests(request):
