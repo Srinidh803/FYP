@@ -79,6 +79,7 @@ def add_player(request, username):
 
     if not request_exists:
         PlayerRequest.objects.create(from_user=request.user, to_user=to_user)
+        print(f"Request created: {request.user.username} ➡ {to_user.username}")
 
     return redirect('player_profile', username=username)
 
