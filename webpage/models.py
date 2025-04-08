@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class PlayerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True,default='profile_pics/default.png')
+    profile_picture = CloudinaryField('image', blank=True, null=True,default='profile_pics/default.png')
 
     game = models.CharField(max_length=100)
     experience = models.PositiveIntegerField(help_text="Experience in years")
