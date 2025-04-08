@@ -14,6 +14,7 @@ from django.contrib import messages
 
 
 # Home View
+@login_required
 def home(request):
     top_players = PlayerProfile.objects.filter(is_top_player=True).select_related('user')
     trending_players = PlayerProfile.objects.filter(is_trending_player=True).select_related('user')
@@ -48,7 +49,8 @@ def search(request):
         )
 
     return render(request, 'search.html', {'search_results': players})
-
+    
+@login_required
 def player_profile(request, username):
     player = get_object_or_404(User, username=username)
     profile = get_object_or_404(PlayerProfile, user=player)
