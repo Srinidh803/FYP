@@ -88,9 +88,10 @@ def manage_requests(request):
     # Incoming requests to the current user
     incoming = PlayerRequest.objects.filter(to_user_id=request.user.id, status='pending')
     print(f"Checking requests for user ID: {request.user.id}")
+
     all_reqs = PlayerRequest.objects.all()
     for r in all_reqs:
-        print(f"{r.from_user.username} -> {r.to_user.username} | Status: {r.status}")
+        print(f"Request ID: {r.id} | From: {r.from_user.username} (ID: {r.from_user.id}) ➡ To: {r.to_user.username} (ID: {r.to_user.id}) | Status: {r.status}")
 
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
