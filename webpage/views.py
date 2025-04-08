@@ -87,6 +87,7 @@ def add_player(request, username):
 def manage_requests(request):
     # Incoming requests to the current user
     incoming = PlayerRequest.objects.filter(to_user_id=request.user.id, status='pending')
+    print(f"Checking requests for user ID: {request.user.id}")
 
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
