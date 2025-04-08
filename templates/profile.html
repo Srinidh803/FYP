@@ -52,7 +52,7 @@
           {% elif already_requested %}
             <button class="btn btn-warning" disabled>⏳ Request Sent</button>
           {% else %}
-            <form method="post" action="{% url 'add_player' user.username %}">
+            <form method="post" action="{% url 'add_player' player.username %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-primary">Add Player</button>
             </form>
