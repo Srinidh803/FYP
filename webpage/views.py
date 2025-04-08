@@ -95,17 +95,6 @@ def add_player(request, username):
 
 @login_required
 def manage_requests(request):
-    # Incoming requests to the current user
-    incoming = PlayerRequest.objects.filter(to_user_id=request.user.id, status='pending')
-    print(f"Checking requests for user ID: {request.user.id}")
-
-    all_reqs = PlayerRequest.objects.all()
-    print(f"📋 DEBUG: Total PlayerRequests: {all_reqs.count()}")
-    for r in all_reqs:
-        print(f"📦 Request ID: {r.id} | From: {r.from_user.username} (ID: {r.from_user.id}) ➡ To: {r.to_user.username} (ID: {r.to_user.id}) | Status: {r.status}")
-
-    return render(request, 'manage_requests.html', {'incoming': incoming})
-
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
         action = request.POST.get('action')
@@ -115,7 +104,7 @@ def manage_requests(request):
             req.status = 'accepted'
             req.save()
 
-            # Optionally create a reverse request to show in both users' chats
+            # Optionally create a reverse request
             PlayerRequest.objects.get_or_create(
                 from_user=request.user,
                 to_user=req.from_user,
@@ -125,9 +114,20 @@ def manage_requests(request):
         elif action == 'decline':
             req.delete()
 
-        return redirect('manage_requests')
+        return redirect('manage_requests')  # redirect to refresh the page
+
+    # GET request – show pending requests
+    incoming = PlayerRequest.objects.filter(to_user_id=request.user.id, status='pending')
+
+    # Debug print (optional)
+    print(f"Checking requests for user ID: {request.user.id}")
+    all_reqs = PlayerRequest.objects.all()
+    print(f"📋 DEBUG: Total PlayerRequests: {all_reqs.count()}")
+    for r in all_reqs:
+        print(f"📦 Request ID: {r.id} | From: {r.from_user.username} ➡ To: {r.to_user.username} | Status: {r.status}")
 
     return render(request, 'manage_requests.html', {'incoming': incoming})
+
 
 
 
