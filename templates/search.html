@@ -50,7 +50,7 @@
           <h5 class="card-title fw-bold text-dark">{{ player.user.username }}</h5>
           <p class="mb-1 text-muted"><strong>Game:</strong> {{ player.game }}</p>
           <p class="mb-1 text-muted"><strong>Rating:</strong> ⭐ {{ player.self_rating }}/5</p>
-          <a href="{% url 'profile' player.user.username %}" class="btn btn-outline-primary mt-3">View Profile</a>
+          <a href="{% url 'player_profile' player.user.username %}" class="btn btn-outline-primary mt-3">View Profile</a>
         </div>
       </div>
     </div>
