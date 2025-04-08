@@ -90,8 +90,11 @@ def manage_requests(request):
     print(f"Checking requests for user ID: {request.user.id}")
 
     all_reqs = PlayerRequest.objects.all()
+    print(f"📋 DEBUG: Total PlayerRequests: {all_reqs.count()}")
     for r in all_reqs:
-        print(f"Request ID: {r.id} | From: {r.from_user.username} (ID: {r.from_user.id}) ➡ To: {r.to_user.username} (ID: {r.to_user.id}) | Status: {r.status}")
+        print(f"📦 Request ID: {r.id} | From: {r.from_user.username} (ID: {r.from_user.id}) ➡ To: {r.to_user.username} (ID: {r.to_user.id}) | Status: {r.status}")
+
+    return render(request, 'manage_requests.html', {'incoming': incoming})
 
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
