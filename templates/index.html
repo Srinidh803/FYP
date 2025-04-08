@@ -78,7 +78,11 @@
   <div class="hero-section d-flex flex-column justify-content-center align-items-center text-center">
     <h1 class="display-4">Welcome to Find Your Player</h1>
     <p class="lead">Find your perfect gaming partner today.</p>
-    <a href="{% url 'search' %}" class="btn btn-primary btn-lg mt-3">Find Player</a>
+    {% if user.is_authenticated %}
+          <a href="{% url 'search' %}" class="btn btn-primary btn-lg mt-3">Find Player</a>   
+     {% else %}
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-3">Find Player</a>
+     {% endif %}
   </div>
 
   <!-- Top Players -->
