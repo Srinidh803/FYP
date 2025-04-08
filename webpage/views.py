@@ -86,7 +86,7 @@ def add_player(request, username):
 @login_required
 def manage_requests(request):
     # Incoming requests to the current user
-    incoming = PlayerRequest.objects.filter(to_user=request.user, status='pending')
+    incoming = PlayerRequest.objects.filter(to_user_id=request.user.id, status='pending')
 
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
