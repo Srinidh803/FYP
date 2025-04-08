@@ -77,13 +77,14 @@ def add_player(request, username):
         # Prevent duplicate requests
         if PlayerRequest.objects.filter(from_user=request.user, to_user=to_user, status='pending').exists():
             print("⚠️ Duplicate request detected.")
-            return redirect('profile', username=username)
+            return redirect('player_profile', username=username)
 
         pr = PlayerRequest(from_user=request.user, to_user=to_user)
         pr.save()
         print(f"✅ PlayerRequest created: {pr.from_user.username} ➡ {pr.to_user.username}")
 
-    return redirect('profile', username=username)
+    return redirect('player_profile', username=username)
+
 
 
 @login_required
