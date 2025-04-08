@@ -72,7 +72,12 @@ def add_player(request, username):
             to_user = User.objects.get(username=username)
         except User.DoesNotExist:
             print("❌ User not found.")
-            return redirect('home')  # or show some error
+            return redirect('home')
+
+        # 👇 Check if the user is trying to add themselves
+        if request.user == to_user:
+            print("🚫 Can't send request to yourself.")
+            return redirect('player_profile', username=username)
 
         # Prevent duplicate requests
         if PlayerRequest.objects.filter(from_user=request.user, to_user=to_user, status='pending').exists():
@@ -84,6 +89,7 @@ def add_player(request, username):
         print(f"✅ PlayerRequest created: {pr.from_user.username} ➡ {pr.to_user.username}")
 
     return redirect('player_profile', username=username)
+
 
 
 
